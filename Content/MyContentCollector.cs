@@ -13,8 +13,9 @@ public class MyContentCollector : ContentBuilder
 
         contentCollection.Include<WildcardRule>("images/*.png");
 
-        // override .txt files to be copied
+        // override .txt and .xml files to be copied
         contentCollection.IncludeCopy<RegexRule>(".txt");
+        contentCollection.IncludeCopy<RegexRule>(".xml");
 
         // exclude bin / obj paths
         contentCollection.Exclude<RegexRule>("bin/");

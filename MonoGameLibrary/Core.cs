@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -87,5 +88,60 @@ public class Core : Game
 
         // Create the sprite batch instance.
         SpriteBatch = new SpriteBatch(GraphicsDevice);
+
+        // Make window come to front on macOS
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            BringWindowToFront();
+        }
     }
+
+    private void BringWindowToFront()
+    {
+        try
+        {
+            // Method 1: Using NSApplication directly via P/Invoke
+            var nsApp = objc_getClass("NSApplication");
+            var sharedApp = objc_msgSend(nsApp, sel_registerName("sharedApplication"));
+            objc_msgSend(sharedApp, sel_registerName("activateIgnoringOtherApps:"), true);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to bring window to front: {ex.Message}");
+
+            // Method 2: Fallback using osascript with corrected syntax
+            try
+            {
+                var process = new System.Diagnostics.Process
+                {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "osascript",
+                        Arguments = "-e 'tell application \"System Events\" to set frontmost of first process whose unix id is " +
+                                    System.Diagnostics.Process.GetCurrentProcess().Id + " to true'",
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        CreateNoWindow = true
+                    }
+                };
+                process.Start();
+                process.WaitForExit();
+            }
+            catch { }
+        }
+    }
+
+    // P/Invoke declarations for Objective-C runtime
+    [DllImport("/usr/lib/libobjc.dylib")]
+    private static extern IntPtr objc_getClass(string name);
+
+    [DllImport("/usr/lib/libobjc.dylib")]
+    private static extern IntPtr sel_registerName(string name);
+
+    [DllImport("/usr/lib/libobjc.dylib")]
+    private static extern IntPtr objc_msgSend(IntPtr receiver, IntPtr selector);
+
+    [DllImport("/usr/lib/libobjc.dylib")]
+    private static extern IntPtr objc_msgSend(IntPtr receiver, IntPtr selector, bool arg1);
 }

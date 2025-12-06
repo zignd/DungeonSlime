@@ -57,3 +57,5 @@ TestResult.xml
 nunit-*.xml
 
 .mgstats
+
+.DS_Store
