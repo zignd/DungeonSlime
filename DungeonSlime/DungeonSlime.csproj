@@ -23,6 +23,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Gum.MonoGame" Version="2025.8.3.3" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.5-develop.13" />
   </ItemGroup>
   <ItemGroup>
@@ -34,7 +35,6 @@
       <ContentTemp>$(ProjectDir)$(IntermediateOutputPath)</ContentTemp>
       <ContentArgs>build -p $(MonoGamePlatform) -s Content -o $(ContentOutput) -i $(ContentTemp)</ContentArgs>
     </PropertyGroup>
-    <MSBuild Projects="..\Content\Content.csproj" Targets="Build;Run"
-      Properties="RunArguments=$(ContentArgs);" />
+    <MSBuild Projects="..\Content\Content.csproj" Targets="Build;Run" Properties="RunArguments=$(ContentArgs);" />
   </Target>
 </Project>
