@@ -43,7 +43,7 @@ public class Game1 : Core
         // Initialize the Gum service. The second parameter specifies
         // the version of the default visuals to use. V2 is the latest
         // version.
-        GumService.Default.Initialize(this, DefaultVisualsVersion.V2);
+        GumService.Default.Initialize(this, DefaultVisualsVersion.V3);
 
         // Tell the Gum service which content manager to use.  We will tell it to
         // use the global content manager from our Core.
