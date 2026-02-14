@@ -12,6 +12,7 @@ public class MyContentCollector : ContentBuilder
         contentCollection.Include<RegexRule>(".");
 
         contentCollection.Include<WildcardRule>("images/*.png");
+        contentCollection.Include<WildcardRule>("effects/*.fx");
 
         // override .txt and .xml files to be copied
         contentCollection.IncludeCopy<RegexRule>(".txt");
