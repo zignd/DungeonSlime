@@ -96,6 +96,10 @@ public class Core : Game
         // content manager.
         Content = base.Content;
 
+        // Ensure the working directory is set to the application directory.
+        // This is critical for app bundles on macOS where content paths are relative.
+        System.IO.Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+
         // Set the root directory for content.
         Content.RootDirectory = "Content";
 
