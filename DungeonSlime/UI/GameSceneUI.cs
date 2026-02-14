@@ -17,6 +17,9 @@ public class GameSceneUI : ContainerRuntime
     // The string format to use when updating the text for the score display.
     private static readonly string s_scoreFormat = "SCORE: {0:D6}";
 
+    // The string format to use when updating the text for the high score display.
+    private static readonly string s_highScoreFormat = "HIGH SCORE: {0:D6}";
+
     // The sound effect to play for auditory feedback of the user interface.
     private SoundEffect _uiSoundEffect;
 
@@ -36,6 +39,9 @@ public class GameSceneUI : ContainerRuntime
 
     // The text runtime used to display the players score on the game screen.
     private TextRuntime _scoreText;
+
+    // The text runtime used to display the highest score on the game screen.
+    private TextRuntime _highScoreText;
 
     /// <summary>
     /// Event invoked when the Resume button on the Pause panel is clicked.
@@ -76,6 +82,11 @@ public class GameSceneUI : ContainerRuntime
         _scoreText = CreateScoreText();
         AddChild(_scoreText);
 
+        // Create the text that will display the highest score and add it as
+        // a child to this container.
+        _highScoreText = CreateHighScoreText();
+        AddChild(_highScoreText);
+
         // Create the Pause panel that is displayed when the game is paused and
         // add it as a child to this container
         _pausePanel = CreatePausePanel(atlas);
@@ -98,6 +109,21 @@ public class GameSceneUI : ContainerRuntime
         text.CustomFontFile = @"fonts/04b_30.fnt";
         text.FontScale = 0.25f;
         text.Text = string.Format(s_scoreFormat, 0);
+
+        return text;
+    }
+
+    private TextRuntime CreateHighScoreText()
+    {
+        TextRuntime text = new TextRuntime();
+        text.Anchor(Gum.Wireframe.Anchor.TopRight);
+        text.WidthUnits = DimensionUnitType.RelativeToChildren;
+        text.X = -20.0f;
+        text.Y = 5.0f;
+        text.UseCustomFont = true;
+        text.CustomFontFile = @"fonts/04b_30.fnt";
+        text.FontScale = 0.25f;
+        text.Text = string.Format(s_highScoreFormat, 0);
 
         return text;
     }
@@ -275,6 +301,15 @@ public class GameSceneUI : ContainerRuntime
     public void UpdateScoreText(int score)
     {
         _scoreText.Text = string.Format(s_scoreFormat, score);
+    }
+
+    /// <summary>
+    /// Updates the text on the high score display.
+    /// </summary>
+    /// <param name="score">The high score to display.</param>
+    public void UpdateHighScoreText(int score)
+    {
+        _highScoreText.Text = string.Format(s_highScoreFormat, score);
     }
 
     /// <summary>

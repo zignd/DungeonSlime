@@ -1,4 +1,5 @@
 using System;
+using DungeonSlime;
 using DungeonSlime.GameObjects;
 using DungeonSlime.UI;
 using Microsoft.Xna.Framework;
@@ -38,6 +39,9 @@ public class GameScene : Scene
     // Tracks the players score.
     private int _score;
 
+    // Tracks the highest score.
+    private int _highScore;
+
     private GameSceneUI _ui;
 
     private GameState _state;
@@ -68,6 +72,10 @@ public class GameScene : Scene
 
         // Initialize the user interface for the game scene.
         InitializeUI();
+
+        // Load the saved high score and update the UI.
+        _highScore = HighScoreStore.LoadHighScore();
+        _ui.UpdateHighScoreText(_highScore);
 
         // Initialize a new game to be played.
         InitializeNewGame();
@@ -123,6 +131,9 @@ public class GameScene : Scene
 
         // Reset the score.
         _score = 0;
+
+        // Update the score display.
+        _ui.UpdateScoreText(_score);
 
         // Set the game state to playing.
         _state = GameState.Playing;
@@ -365,6 +376,14 @@ public class GameScene : Scene
 
         // Set the game state to game over.
         _state = GameState.GameOver;
+
+        // Update the high score if the player beat it.
+        if (_score > _highScore)
+        {
+            _highScore = _score;
+            HighScoreStore.SaveHighScore(_highScore);
+            _ui.UpdateHighScoreText(_highScore);
+        }
     }
 
     public override void Draw(GameTime gameTime)
